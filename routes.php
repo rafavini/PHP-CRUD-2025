@@ -1,47 +1,4 @@
 <?php
-
-// require_once './app/Controllers/homeController.php';
-// require_once './app/Controllers/loginController.php';
-
-// $homeController = new HomeController();
-// $loginController = new LoginController();
-
-
-// $routes = [
-//     '/' => [$loginController, 'index'],
-//     '/home' => [$homeController, 'index'],
-//     '/post/(\d+)' => [$homeController, 'post'],
-// ];
-
-
-// return $routes;
-
-// $request = $_SERVER["REQUEST_URI"];
-// $request = str_replace('/mvc', '', $request);
-
-
-// $request = parse_url($request,PHP_URL_PATH);
-
-
-
-
-// switch($request){
-//     case '/':
-//         $loginController->index();
-//         break;
-//     case '/home':
-//         checkAuth(roles::funcionario);
-//         $homeController->index();
-//         break;
-
-//     case '/teste/(\d+)':
-//         $homeController->teste();
-
-//     default:
-//         http_response_code(404);
-//         echo "pagina nao encontrada";
-//         break;
-// }
 class Router
 {
     private static $routes = [];
@@ -69,7 +26,7 @@ class Router
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         // Ajuste: remove o diretório base "/mvc" se houver
-        $baseFolder = '/mvc';
+        $baseFolder = '/php-crud-2025';
         if (strpos($requestUri, $baseFolder) === 0) {
             $requestUri = substr($requestUri, strlen($baseFolder));
         }

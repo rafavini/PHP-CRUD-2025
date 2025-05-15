@@ -15,7 +15,7 @@ class LoginController extends BaseController
             $result = $model->Auth($_POST["username"], $_POST["password"]);
             if ($result) {
                 $_SESSION['toast'] = ['type' => 'success', 'message' => 'Login bem-sucedido!'];
-                header('Location: /mvc/home');
+                header('Location:'. BASE_URL . "home");
             }
         }
     }

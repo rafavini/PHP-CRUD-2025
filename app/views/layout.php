@@ -1,5 +1,6 @@
 <?php
 require_once './app/views/components/ToastComponent.php';
+require_once './app/views/components/MenuComponent.php';
 
 ?>
 <!DOCTYPE html>
@@ -9,29 +10,11 @@ require_once './app/views/components/ToastComponent.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title; ?></title>
+    <link rel="stylesheet" href="./app/views/assets/css/global.css">
 </head>
 
-<style>
-.toast {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #333;
-    color: #fff;
-    padding: 15px 20px;
-    border-radius: 5px;
-    opacity: 0.9;
-    z-index: 1000;
-    font-family: sans-serif;
-    transition: opacity 0.5s ease;
-}
-.toast.success { background-color: #4caf50; }
-.toast.error { background-color: #f44336; }
-</style>
-
-
 <body>
-
+    <?php MenuComponent::render()?>
     <?php ToastComponent::render() ?>
     <?php require_once __DIR__ . "/" . $viewPath . '.php'; ?>
 </body>

@@ -20,10 +20,10 @@ class HomeController extends BaseController
             $result = $model->AddUser($_POST["username"], $_POST["password"], $_POST["email"], (int)$_POST["role"]);
             if ($result) {
                 $_SESSION['toast'] = ['type' => 'success', 'message' => 'Cadastro bem-sucedido!'];
-                header('Location: /mvc/home');
+                header('Location:'. BASE_URL."home");
             } else {
                 $_SESSION['toast'] = ['type' => 'error', 'message' => 'Aconteceu algum erro'];
-                header('Location: /mvc/addUser');
+                header('Location:'. BASE_URL."addUser");
             }
         } else {
             $this->renderView("home/addUser");
@@ -37,10 +37,10 @@ class HomeController extends BaseController
             $result = $model->UpdateUser($id,$_POST["username"],$_POST["password"],$_POST["email"],$_POST["role"]);
             if($result){
                 $_SESSION['toast'] = ['type' => 'success', 'message' => 'Editado bem-sucedido!'];
-                header('Location: /mvc/home');
+                header('Location:'. BASE_URL."home");
             }else{
                 $_SESSION['toast'] = ['type' => 'error', 'message' => 'Algo deu errado'];
-                header('Location: /mvc/edit/'.$id);
+                header('Location:'. BASE_URL."/edit/".$id);
             }
         }else{
             $user = $model->getUserById($id);
