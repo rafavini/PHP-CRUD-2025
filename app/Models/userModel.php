@@ -49,6 +49,37 @@ class UserModel
         }
     }
 
+    public function GetAllUsers()
+    {
+        // Prepare a SQL query to select all records from the book table
+        $this->db->query("SELECT * FROM usuario");
+        // Execute the prepared query
+        $this->db->execute();
+        // Return the results of the query
+        return $this->db->results();
+    }
+
+
+    public function CountUsers()
+{
+    
+    $this->db->query("SELECT COUNT(*) as total FROM usuario");
+    $this->db->execute();
+    $this->db->result();
+    //VERIFICA ESSA FUNCAO AQUI NO ROW
+    return (int)$row['total'];
+}
+
+public function GetUsersPaginated($limit, $offset)
+{
+    
+     $this->db->query("SELECT * FROM usuario LIMIT :limit OFFSET :offset");
+    $this->db->bind(':limit', (int)$limit);
+    $this->db->bind(':offset', (int)$offset);
+    $this->db->execute();
+    return $this->db->results();
+}
+
     public function getUserById($id)
     {
         // Prepare a SQL query to select a record from the book table by ID
