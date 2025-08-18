@@ -1,24 +1,35 @@
 <?php
-function genereteCsrf(){
-        
-        if(isset($_SESSION['tolkenCsrf'])){
-            unset($_SESSION['tolkenCsrf']);
-        }
-
-        $_SESSION['tolkenCsrf'] = md5(uniqid(32));
-
-        return '<input type="hidden" id="tolkenCsrf" name="tolkenCsrf" value="'.$_SESSION['tolkenCsrf'].'">';
+function genereteCsrf()
+{
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
     }
-function validateTolkenCsrf($tolken){
-        if(!isset($_SESSION['tolkenCsrf'])){
-            return "tolken invalido";
-        }
-
-        if($_SESSION['tolkenCsrf'] !== $tolken){
-            return 'tolken invalido';
-        }
-
-        unset($_SESSION['tolkenCsrf']);
-
-        return TRUE;
+    if (isset($_SESSION['csrfToken'])) {
+        unset($_SESSION['csrfToken']);
     }
+
+    if (!isset($_SESSION['csrfToken'])) {
+        $_SESSION['csrfToken'] = md5(uniqid(32));
+    }
+    return '<input type="hidden" id="csrfToken" name="csrfToken" value="' . $_SESSION['csrfToken'] . '">';
+}
+function validateTokenCsrf($token)
+{
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (!isset($_SESSION['csrfToken'])) {
+        echo json_encode(['error' => 'falta do csrf token']);
+        exit;
+    }
+
+    if ($_SESSION['csrfToken'] !== $token) {
+        echo json_encode(['error' => 'csrf token inválido']);
+        exit;
+    }
+
+    unset($_SESSION['csrfToken']);
+
+    return TRUE;
+}

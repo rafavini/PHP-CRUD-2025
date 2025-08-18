@@ -1,5 +1,6 @@
 <?php
 include 'src/utils/csrf.php';
+include __DIR__ . "/vendor/autoload.php";
 
 ?>
 <!DOCTYPE html>
@@ -14,11 +15,12 @@ include 'src/utils/csrf.php';
         <?php
         echo genereteCsrf();
         ?>
+        
         <input type="text" placeholder="email" name="email">
         <input type="password" placeholder="password" name="password">
         <button type="submit">Entrar</button>
     </form>
 
-    <script src="./src/public/js/login.js"></script>
+    <script type="module" src="./src/public/js/login.js"></script>
 </body>
 </html>
