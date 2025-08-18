@@ -1,0 +1,15 @@
+{
+    "name": "rafavini/php-crud-2025",
+    "autoload": {
+        "psr-4": {
+            "Rafavini\\PhpCrud2025\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "rafavini",
+            "email": "42884321+rafavini@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
