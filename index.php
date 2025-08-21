@@ -1,6 +1,5 @@
 <?php
-include 'src/utils/csrf.php';
-include __DIR__ . "/vendor/autoload.php";
+include 'src/utils/utils.php';
 
 ?>
 <!DOCTYPE html>

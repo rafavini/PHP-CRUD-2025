@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . "/../../utils/utils.php";
 
 // Define a class named Book this will be the Book model
 class LoginModel
@@ -24,10 +25,13 @@ class LoginModel
             $this->db->execute();
             $result = $this->db->results();
             if ($result) {
+
+                $roleName = MapRole($result[0]["role"]);
+
                 $_SESSION['userAuth'] = [
                     'id' => $result[0]["id"],
                     'email' => $result[0]["email"],
-                    'role' => $result[0]["role"]
+                    'role' => $roleName
                 ];
                 return $result[0];
             } else {
@@ -36,22 +40,5 @@ class LoginModel
         } catch (\Throwable $th) {
             echo "Error: " . $th->getMessage();
         }
-
-        // $this->db->query("SELECT * FROM usuario WHERE username = :username and password = :password");
-        // $this->db->bind(':username', $username);
-        // $this->db->bind(':password', $password);
-        // $this->db->execute();
-        // $data = $this->db->result();
-        // if($data){
-        //     session_start();
-        //     $_SESSION['userAuth'] = [
-        //         'id' => $data["id"],
-        //         'username' => $data["username"],
-        //         'role' => $data["role"]
-        //     ];
-        //     return True;
-        // }else{
-        //     return false;
-        // }
     }
 }
