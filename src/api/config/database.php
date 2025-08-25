@@ -7,11 +7,12 @@ require __DIR__ . "/../../../vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
 $dotenv->load();
 
-class Database{
+class Database
+{
     private $host;
-    private $dbname; 
-    private $user; 
-    private $pass; 
+    private $dbname;
+    private $user;
+    private $pass;
     private $dbh; // Define database handler
     private $stmt; // Define SQL statement
     private $error; // Define error message
@@ -37,7 +38,6 @@ class Database{
         // Try to connect to the database by creating a new PDO instance
         try {
             $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
-            
         } catch (PDOException $e) {
             // If an error occurs, store the error message
             $this->error = $e->getMessage();
@@ -66,7 +66,8 @@ class Database{
     }
 
     // Method to fetch a single result to an associative array
-    public function result() {
+    public function result()
+    {
         // Execute the statement
         $this->execute();
         // Fetch and return a single result
@@ -75,7 +76,7 @@ class Database{
 
     // Method to bind a value to a parameter in the SQL statement
     public function bind($param, $value)
-    {   
+    {
         // Bind the value to the parameter
         $this->stmt->bindValue($param, $value);
     }

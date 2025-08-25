@@ -1,5 +1,6 @@
 <?php
 include 'src/utils/utils.php';
+include_once __DIR__ . "/src/utils/alerts.php";
 
 ?>
 <!DOCTYPE html>
@@ -8,8 +9,10 @@ include 'src/utils/utils.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+    <?php showToast()?>
     <form id="formLogin">
         <?php
         echo genereteCsrf();

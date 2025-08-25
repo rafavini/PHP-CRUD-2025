@@ -4,7 +4,7 @@ require_once __DIR__ . "/../../utils/utils.php";
 require_once __DIR__ . "/../../utils/alerts.php";
 
 // Define a class named Book this will be the Book model
-class LoginModel
+class UserModel
 {
 
     // Declare a private property to hold the database connection
@@ -17,27 +17,28 @@ class LoginModel
         $this->db = new Database();
     }
 
-    public function Auth(array $data)
+    public function GetAllUsers()
     {
         try {
-            $this->db->query("SELECT * FROM usuario where email = :email and password = :password");
-            $this->db->bind(':email', $data['email']);
-            $this->db->bind(':password', $data['password']);
+
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $perPage = isset($_GET['perPage']) ? (int)$_GET['perPage'] : 10;
+            $offset = ($page - 1) * $perPage;
+
+            $this->db->query("SELECT id, username, email, role, is_active FROM usuario LIMIT $perPage OFFSET $offset ");
             $this->db->execute();
-            $result = $this->db->result();
+            $result = $this->db->results();
+
+            $this->db->query("SELECT COUNT(*) as total FROM usuario");
+            $totalUsers = $this->db->result()['total'];
+
+
             if ($result) {
-
-                $roleName = MapRole($result["role"]);
-
-                $_SESSION['userAuth'] = [
-                    'id' => $result["id"],
-                    'username' => $result["username"],
-                    'email' => $result["email"],
-                    'role' => $roleName
+                return [
+                    'users' => $result,
+                    'totalUsers' => $totalUsers
                 ];
-                return $result;
             } else {
-                
                 return false;
             }
         } catch (\Throwable $th) {

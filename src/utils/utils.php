@@ -1,6 +1,7 @@
 <?php
 include_once __DIR__ . "/enum.php";
 include_once __DIR__ . "/../../vendor/autoload.php";
+include_once __DIR__ . "/alerts.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
 $dotenv->load();
@@ -55,46 +56,17 @@ function isUserAuthenticate(){
 }
 
 
-
 function RequireAuth(string $requireRole){
     if(!isUserAuthenticate()){
+        setToast("Acesso negado. Faça login para continuar.", "error");
         header("Location: ". $_ENV["BASE_URL"]);
     }
-}
-
-
-
-
-
-
-function ValidateRole($userRole,$validateRole){
-
-    if($userRole == $validateRole){
-        // $_SESSION['toast'] = ['type' => 'error', 'message' => 'Nao tem permissão para acessar essa pagina'];
-        return true;
-    }else{
-        return false;
-    }   
-}
-
-function ValidateUserSession(){
-    if(isset($_SESSION['userAuth'])){
-        // $_SESSION['toast'] = ['type' => 'error', 'message' => 'Nao tem permissão para acessar essa pagina'];
-        return true;
-    }else{
-        return false;
-    }
-}
-
-
-function ValidadePage($validationRole){
-
-    if(!isset($_SESSION['userAuth'])){
-        echo "sem auth";
-        // header("Location: /index.php");
+    $userRole = $_SESSION['userAuth']['role'];
+    if($userRole !== $requireRole){
+        setToast("Acesso negado. Você não tem permissão para acessar esta página.", "error");
+        header("Location: ". $_ENV["BASE_URL"]);
     }
 
-    // if (!ValidateRole(isset($_SESSION['userAuth']['role']), $validationRole)) {
-    //     header("Location: /index.php");
-    // }
 }
+
+
