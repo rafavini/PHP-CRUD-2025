@@ -20,25 +20,29 @@ class LoginModel
     public function Auth(array $data)
     {
         try {
-            $this->db->query("SELECT * FROM usuario where email = :email and password = :password");
+            $this->db->query("SELECT * FROM usuario where email = :email");
             $this->db->bind(':email', $data['email']);
-            $this->db->bind(':password', $data['password']);
             $this->db->execute();
             $result = $this->db->result();
             if ($result) {
-
-                $roleName = MapRole($result["role"]);
-
-                $_SESSION['userAuth'] = [
-                    'id' => $result["id"],
-                    'username' => $result["username"],
-                    'email' => $result["email"],
-                    'role' => $roleName
-                ];
-                return $result;
+                // Verifica a senha
+                if (password_verify($data['password'], $result['password'])) {
+    
+                    $roleName = MapRole($result["role"]);
+    
+                    $_SESSION['userAuth'] = [
+                        'id' => $result["id"],
+                        'username' => $result["username"],
+                        'email' => $result["email"],
+                        'role' => $roleName
+                    ];
+    
+                    return $result;
+                } else {
+                    return false; // senha incorreta
+                }
             } else {
-                
-                return false;
+                return false; // email não encontrado
             }
         } catch (\Throwable $th) {
             echo "Error: " . $th->getMessage();

@@ -17,3 +17,32 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
         echo json_encode(['error' => 'No users found', 'success' => false]);
     }
 }
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrfToken'])) {
+
+    //validar o csrfToken
+    validateTokenCsrf($_POST['csrfToken']);
+    $result = $userController->CreateUser($_POST);
+    if($result){
+        // Create successful
+        setToast("Usuário criado com sucesso", "success");
+        echo json_encode(['success' => $result, 'message' => 'User created successfully']);
+    }else{
+        // Create failed
+        setToast("Erro ao criar usuário", "error");
+        echo json_encode(['error' => 'Error creating user', 'success' => false]);
+    }
+
+    // $result = $loginController->Auth($_POST);
+//     if ($result) {
+//         // Login successful
+//         setToast("Login realizado com sucesso", "success");
+//         echo json_encode(['data' => $result, 'success' => true, 'message' => 'Login successful']);
+//         // echo json_encode(['success' => $_POST]);
+//     }else{
+//         // Login failed
+//         setToast("Credenciais inválidas", "error");
+//         echo json_encode(['error' => 'Invalid credentials', 'success' => false]);
+//     }
+}
