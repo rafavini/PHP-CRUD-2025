@@ -10,9 +10,15 @@ class Router
         $this->addRoute('GET', $uri, $controller, $roles);
         // echo "GET method called for URI: $uri, Controller: $controller";
     }
-    public function post() {}
-    public function delete() {}
-    public function put() {}
+    public function post($uri, $controller, $roles = []) {
+        $this->addRoute('POST', $uri, $controller, $roles);
+    }
+    public function delete($uri, $controller, $roles = []) {
+        $this->addRoute('DELETE', $uri, $controller, $roles);
+    }
+    public function put($uri, $controller, $roles = []) {
+        $this->addRoute('PUT', $uri, $controller, $roles);
+    }
 
 
     public function addRoute($method, $uri, $controller, $roles = [])
@@ -36,14 +42,11 @@ class Router
 
     protected function callControllerAction($controllerAction)
     {
-        // Divide a string "Controller:Method" em duas partes.
         list($controllerName, $methodName) = explode(':', $controllerAction);
-        echo $controllerName;
 
-        // Constrói o nome completo da classe.
+        // Use o namespace "Controllers" que você configurou
         $fullControllerName = 'Controllers\\' . $controllerName;
 
-        // Verifica se a classe do controlador existe.
         if (!class_exists($fullControllerName)) {
             echo "Erro: O controlador '$fullControllerName' não foi encontrado.";
             return;
@@ -60,15 +63,19 @@ class Router
         // Finalmente, chama o método do controlador.
         $controller->$methodName();
     }
-
     public function run()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $uri = strtok($_GET['url'], '?');
+        $uri = "/" . strtok($_GET['url'], '?');
+        // print_r($this->routes);
+
+        // if (empty($uri)) {
+        //     $uri = '/';
+        // }
+
         // Verifica se a URI está presente na sua rota.
         if (isset($this->routes[$method][$uri])) {
             $route = $this->routes[$method][$uri];
-            print_r($route);
 
             // 1. Verificação de permissões (roles).
             if (!$this->checkRoles($route['roles'])) {

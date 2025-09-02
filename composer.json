@@ -2,7 +2,8 @@
     "name": "rafavini/php-crud-2025",
     "autoload": {
         "psr-4": {
-            "Rafavini\\PhpCrud2025\\": "src/"
+            "Controllers\\": "controllers/",
+            "Core\\": "Core/"
         }
     },
     "authors": [

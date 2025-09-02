@@ -8,4 +8,10 @@
 # composer install
 # composer require vlucas/phpdotenv
 
+# fazer essa configuração 
+#             "Controllers\\": "controllers/",
+#            "Core\\": "Core/"
+
+# rodar composer dump-autoload
+
 
