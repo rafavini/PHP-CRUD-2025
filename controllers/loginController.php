@@ -1,11 +1,10 @@
 <?php
 
-namespace Controllers;
 
 class LoginController
 {
     public function index()
     {
-       echo "teste";
+        require __DIR__ . '/../views/login.php';
     }
 }

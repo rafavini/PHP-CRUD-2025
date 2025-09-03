@@ -1,10 +1,13 @@
 <?php
+
+
 // usado para tester
 // require_once __DIR__ . "/config.php";
-require __DIR__ . "/../../../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 //createImmutable deve localizar a pasta vendor
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 class Database

@@ -10,13 +10,16 @@ class Router
         $this->addRoute('GET', $uri, $controller, $roles);
         // echo "GET method called for URI: $uri, Controller: $controller";
     }
-    public function post($uri, $controller, $roles = []) {
+    public function post($uri, $controller, $roles = [])
+    {
         $this->addRoute('POST', $uri, $controller, $roles);
     }
-    public function delete($uri, $controller, $roles = []) {
+    public function delete($uri, $controller, $roles = [])
+    {
         $this->addRoute('DELETE', $uri, $controller, $roles);
     }
-    public function put($uri, $controller, $roles = []) {
+    public function put($uri, $controller, $roles = [])
+    {
         $this->addRoute('PUT', $uri, $controller, $roles);
     }
 
@@ -42,36 +45,54 @@ class Router
 
     protected function callControllerAction($controllerAction)
     {
+        // Divide "Controller:method"
         list($controllerName, $methodName) = explode(':', $controllerAction);
 
-        // Use o namespace "Controllers" que você configurou
-        $fullControllerName = 'Controllers\\' . $controllerName;
+        // Evita path traversal
+        $controllerName = basename($controllerName);
 
-        if (!class_exists($fullControllerName)) {
-            echo "Erro: O controlador '$fullControllerName' não foi encontrado.";
+        // Define o caminho do arquivo
+        if (isset($_GET['url']) && str_starts_with($_GET['url'], 'api/')) {
+            $controllerPath = __DIR__ . '/../controllers/api/' . $controllerName . '.php';
+        } else {
+            $controllerPath = __DIR__ . '/../controllers/' . $controllerName . '.php';
+        }
+
+        // Verifica se o arquivo existe
+        if (!file_exists($controllerPath)) {
+            http_response_code(404);
+            echo "Erro: O arquivo do controlador '$controllerPath' não foi encontrado.";
             return;
         }
 
-        $controller = new $fullControllerName();
+        // Inclui o arquivo
+        require_once $controllerPath;
 
-        // Verifica se o método existe no controlador.
+        // Verifica se a classe existe
+        if (!class_exists($controllerName)) {
+            http_response_code(500);
+            echo "Erro: A classe '$controllerName' não foi encontrada no arquivo.";
+            return;
+        }
+
+        // Instancia a classe
+        $controller = new $controllerName();
+
+        // Verifica se o método existe
         if (!method_exists($controller, $methodName)) {
+            http_response_code(404);
             echo "Erro: O método '$methodName' não foi encontrado no controlador '$controllerName'.";
             return;
         }
 
-        // Finalmente, chama o método do controlador.
+        // Chama o método
         $controller->$methodName();
     }
+
     public function run()
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = "/" . strtok($_GET['url'], '?');
-        // print_r($this->routes);
-
-        // if (empty($uri)) {
-        //     $uri = '/';
-        // }
 
         // Verifica se a URI está presente na sua rota.
         if (isset($this->routes[$method][$uri])) {

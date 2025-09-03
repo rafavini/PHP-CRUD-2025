@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . "/../config/database.php";
-require_once __DIR__ . "/../../utils/utils.php";
-require_once __DIR__ . "/../../utils/alerts.php";
 
+require_once __DIR__ . "/../Core/database.php";
+require_once __DIR__ . "/../Core/helper.php";
+require_once __DIR__ . "/../components/alerts.php";
 // Define a class named Book this will be the Book model
 class LoginModel
 {

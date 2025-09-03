@@ -1,20 +1,72 @@
 <?php
+include_once __DIR__ . "/enum.php";
+include_once __DIR__ . "/../vendor/autoload.php";
+include_once __DIR__ . "/../components/alerts.php";
 
-function view($path, $data = [])
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+
+function genereteCsrf()
 {
-    // Extrai o array de dados para variáveis.
-    // Ex: ['nome' => 'Maria'] se torna a variável $nome = 'Maria';
-    extract($data);
-
-    // Constrói o caminho completo para o arquivo da view.
-    // Ex: 'index' vira 'views/index.view.php'
-    $viewFile = 'views/' . str_replace('.', '/', $path) . '.view.php';
-    
-    // Inclui o arquivo da view.
-    if (file_exists($viewFile)) {
-        require $viewFile;
-    } else {
-        // Em um projeto real, você lidaria com o erro 404 de forma mais robusta.
-        echo "Erro: A view '$viewFile' não foi encontrada.";
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
     }
+    if (isset($_SESSION['csrfToken'])) {
+        unset($_SESSION['csrfToken']);
+    }
+
+    if (!isset($_SESSION['csrfToken'])) {
+        $_SESSION['csrfToken'] = md5(uniqid(32));
+    }
+    return '<input type="hidden" id="csrfToken" name="csrfToken" value="' . $_SESSION['csrfToken'] . '">';
 }
+function validateTokenCsrf($token)
+{
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (!isset($_SESSION['csrfToken'])) {
+        echo json_encode(['error' => 'falta do csrf token']);
+        exit;
+    }
+
+    if ($_SESSION['csrfToken'] !== $token) {
+        echo json_encode(['error' => 'csrf token inválido']);
+        exit;
+    }
+
+    unset($_SESSION['csrfToken']);
+
+    return TRUE;
+}
+
+
+function MapRole($role){
+    return match($role){
+        Role::ADMIN => "admin",
+        Role::PROFESSOR => "professor",
+    };
+}
+
+
+function isUserAuthenticate(){
+    return isset($_SESSION['userAuth']);
+}
+
+
+function RequireAuth(string $requireRole){
+    if(!isUserAuthenticate()){
+        setToast("Acesso negado. Faça login para continuar.", "error");
+        header("Location: ". $_ENV["BASE_URL"]);
+    }
+    $userRole = $_SESSION['userAuth']['role'];
+    if($userRole !== $requireRole){
+        setToast("Acesso negado. Você não tem permissão para acessar esta página.", "error");
+        header("Location: ". $_ENV["BASE_URL"]);
+    }
+
+}
+
+
