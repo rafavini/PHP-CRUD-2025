@@ -3,13 +3,15 @@
 
 class HomeController
 {
+    private $fileModel;
+
+    public function __construct()
+    {
+        $this->fileModel = new FileModel();
+    }
     public function index()
     {
-        $nomeUsuario = "João da Silva";
-        $produtos = [
-            'item' => 'Smartphone',
-            'preço' => 'R$ 1.500',
-        ];
+        $result = $this->fileModel->getAllFiles();   
         require __DIR__ . '/../views/home.php';
     }
 }

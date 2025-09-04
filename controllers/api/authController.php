@@ -13,14 +13,7 @@ class AuthController
         $this->loginController = new LoginModel();
     }
 
-    public function index()
-    {
-        header('Content-Type: application/json');
-        echo json_encode([
-            ["id" => 1, "name" => "Rafael"],
-            ["id" => 2, "name" => "Maria"],
-        ]);
-    }
+    public function index() {}
 
     public function authenticate()
     {

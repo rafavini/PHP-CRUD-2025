@@ -1,6 +1,5 @@
 <?php
 
-namespace Core;
 
 class Router
 {
@@ -8,7 +7,6 @@ class Router
     public function get($uri, $controller, $roles = [])
     {
         $this->addRoute('GET', $uri, $controller, $roles);
-        // echo "GET method called for URI: $uri, Controller: $controller";
     }
     public function post($uri, $controller, $roles = [])
     {
@@ -27,20 +25,17 @@ class Router
     public function addRoute($method, $uri, $controller, $roles = [])
     {
         $this->routes[$method][$uri] = ['controller' => $controller, 'roles' => $roles];
+        // print_r($this->routes);
     }
 
     protected function checkRoles(array $allowedRoles)
     {
-        // Se a rota não exige roles, o acesso é permitido.
-        if (empty($allowedRoles)) {
-            return true;
-        }
+        if (empty($allowedRoles)) return true;
 
-        // Em um projeto real, você obteria a role do usuário logado.
-        // Este é um exemplo de simulação.
-        $userRole = 'user'; // Substitua por sua lógica de autenticação.
-
-        return in_array($userRole, $allowedRoles);
+        if (!isset($_SESSION['userAuth']['role'])) return false;
+    
+        $userRole = $_SESSION['userAuth']['role'];
+        return in_array($userRole, $allowedRoles); // aqui vai achar 'admin'
     }
 
     protected function callControllerAction($controllerAction)
@@ -97,7 +92,7 @@ class Router
         // Verifica se a URI está presente na sua rota.
         if (isset($this->routes[$method][$uri])) {
             $route = $this->routes[$method][$uri];
-
+            // print_r($route);
             // 1. Verificação de permissões (roles).
             if (!$this->checkRoles($route['roles'])) {
                 header("HTTP/1.0 403 Forbidden");

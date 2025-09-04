@@ -1,15 +1,40 @@
+<?php
+include_once __DIR__ . "/../vendor/autoload.php";
+include_once __DIR__ . "/../Core/helper.php";
+include_once __DIR__ . "/../components/alerts.php";
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Página com Dados</title>
 </head>
+
 <body>
+    <?php showToast() ?>
+    <form id="formArquivo" enctype="multipart/form-data">
+        <?php
+        echo genereteCsrf();
+        ?>
+        <input type="file" id="fileInput" name="arquivo[]" multiple>
+        <button type="submit">Enviar</button>
+    </form>
 
-    <h1>Olá, <?= htmlspecialchars($nomeUsuario); ?>!</h1>
 
-    <p>Seu produto favorito é o **<?= htmlspecialchars($produtos['item']); ?>**.</p>
-    <p>O preço é de **<?= htmlspecialchars($produtos['preço']); ?>**.</p>
+    <?php foreach ($files as $file): ?>
+        <li>
+            <?= htmlspecialchars($file['nome_original']) ?>
+            (<?= round($file['tamanho'] / 1024, 2) ?> KB)
+            | <a href="<?= htmlspecialchars($file['caminho']) ?>" download>Baixar</a>
+            | <a href="delete.php?id=<?= $file['id'] ?>">Excluir</a>
+        </li>
+    <?php endforeach; ?>
 
+
+    <script type="module" src="<?php echo $_ENV["FRONTEND_URL"] ?>/public/js/file.js"></script>
 </body>
+
 </html>
