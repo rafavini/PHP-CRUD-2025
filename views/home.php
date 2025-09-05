@@ -11,6 +11,8 @@ $dotenv->load();
 <head>
     <meta charset="UTF-8">
     <title>Página com Dados</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -24,7 +26,7 @@ $dotenv->load();
     </form>
 
 
-    <?php foreach ($files as $file): ?>
+    <?php foreach ($result as $file): ?>
         <li>
             <?= htmlspecialchars($file['nome_original']) ?>
             (<?= round($file['tamanho'] / 1024, 2) ?> KB)

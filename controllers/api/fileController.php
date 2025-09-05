@@ -13,18 +13,12 @@ class fileController
         $this->fileModel = new FileModel();
     }
 
-    // public function index()
-    // {
-    //     $files = $this->fileModel->getAllFiles();
-    //     echo json_encode($files);
-    // }
-
-    public function addFile()
+    public function createFile()
     {
         if (isset($_POST['csrfToken'])) {
             validateTokenCsrf($_POST['csrfToken']);
             // print_r($_FILES);
-            $result = $this->fileModel->addFile();
+            $result = $this->fileModel->createFile();
             echo json_encode(['arquivos' => $result]);
         } else {
             setToast("Acesso negado. Faça login para continuar.", "error");

@@ -1,5 +1,5 @@
 <?php
-
+require_once __DIR__ . '/../models/fileModel.php';
 
 class HomeController
 {
@@ -11,6 +11,7 @@ class HomeController
     }
     public function index()
     {
+        RequireAuth("admin");
         $result = $this->fileModel->getAllFiles();   
         require __DIR__ . '/../views/home.php';
     }

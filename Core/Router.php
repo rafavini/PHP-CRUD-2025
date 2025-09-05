@@ -28,15 +28,15 @@ class Router
         // print_r($this->routes);
     }
 
-    protected function checkRoles(array $allowedRoles)
-    {
-        if (empty($allowedRoles)) return true;
+    // protected function checkRoles(array $allowedRoles)
+    // {
+    //     if (empty($allowedRoles)) return true;
 
-        if (!isset($_SESSION['userAuth']['role'])) return false;
+    //     if (!isset($_SESSION['userAuth']['role'])) return false;
     
-        $userRole = $_SESSION['userAuth']['role'];
-        return in_array($userRole, $allowedRoles); // aqui vai achar 'admin'
-    }
+    //     $userRole = $_SESSION['userAuth']['role'];
+    //     return in_array($userRole, $allowedRoles); // aqui vai achar 'admin'
+    // }
 
     protected function callControllerAction($controllerAction)
     {
@@ -94,11 +94,11 @@ class Router
             $route = $this->routes[$method][$uri];
             // print_r($route);
             // 1. Verificação de permissões (roles).
-            if (!$this->checkRoles($route['roles'])) {
-                header("HTTP/1.0 403 Forbidden");
-                echo "Acesso negado: Você não tem permissão para acessar esta página.";
-                return;
-            }
+            // if (!$this->checkRoles($route['roles'])) {
+            //     header("HTTP/1.0 403 Forbidden");
+            //     echo "Acesso negado: Você não tem permissão para acessar esta página.";
+            //     return;
+            // }
 
             // 2. Chama o método do controlador.
             $this->callControllerAction($route['controller']);
