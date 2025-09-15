@@ -47,6 +47,7 @@ function MapRole($role){
     return match($role){
         Role::ADMIN => "admin",
         Role::PROFESSOR => "professor",
+        Role::ALUNO => "aluno",
     };
 }
 
@@ -61,6 +62,8 @@ function RequireAuth(string $requireRole){
         setToast("Acesso negado. Faça login para continuar.", "error");
         header("Location: ". $_ENV["BASE_URL"]);
     }
+
+
     $userRole = $_SESSION['userAuth']['role'];
     if($userRole !== $requireRole){
         setToast("Acesso negado. Você não tem permissão para acessar esta página.", "error");

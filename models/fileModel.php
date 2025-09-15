@@ -24,7 +24,7 @@ class FileModel
         return $result;
     }
 
-    public function addFile()
+    public function createFile()
     {
         $userId = $_SESSION['userAuth']['id'];
         $uploadDir = __DIR__ . "/../storage/$userId/";
